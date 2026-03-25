@@ -44,8 +44,9 @@ export default function Home() {
           <li>PDF report delivered to your email</li>
         </ul>
         <PayButton 
+          paymentLink="https://buy.stripe.com/28E4gyfVCail9OsgAr8k801"
           priceId="price_pastlife_full" 
-          label="Get Full Reading - $24.99"
+          label="Get Full Reading - $4.99"
         />
       </section>
 
