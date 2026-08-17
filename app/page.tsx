@@ -4,6 +4,37 @@ import { useState } from 'react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://pastlives-api.vercel.app';
 
+// Entitlements written by /success after Stripe verification — same localStorage
+// contract as shared/ui-components/entitlement.js. Peek before the API call,
+// consume only after a successful premium response so a failed call doesn't
+// burn the credit.
+const ENT_KEY = 'mdo3d_premium';
+function entIndex(list: any[]): number {
+  return list.findIndex((e: any) => !e.consumed &&
+    (!/monthly/.test(e.readingType || '') || Date.now() - e.verifiedAt < 30 * 24 * 60 * 60 * 1000));
+}
+function hasEntitlement(): boolean {
+  try { return entIndex(JSON.parse(localStorage.getItem(ENT_KEY) || '[]')) !== -1; }
+  catch { return false; }
+}
+function activeSessionId(): string | null {
+  try {
+    const list = JSON.parse(localStorage.getItem(ENT_KEY) || '[]');
+    const i = entIndex(list);
+    return i === -1 ? null : (list[i].sessionId || null);
+  } catch { return null; }
+}
+function consumeEntitlement(): void {
+  try {
+    const list = JSON.parse(localStorage.getItem(ENT_KEY) || '[]');
+    const idx = entIndex(list);
+    if (idx !== -1 && !/monthly/.test(list[idx].readingType || '')) {
+      list[idx].consumed = true;
+      localStorage.setItem(ENT_KEY, JSON.stringify(list));
+    }
+  } catch {}
+}
+
 export default function Home() {
   const [formData, setFormData] = useState({
     name: '',
@@ -31,6 +62,7 @@ export default function Home() {
     setLoading(true);
     setError('');
 
+    const premium = hasEntitlement();
     try {
       const response = await fetch(`${API_URL}/api/reading/generate`, {
         method: 'POST',
@@ -47,12 +79,14 @@ export default function Home() {
             talents: formData.talents || undefined
           },
           question: formData.question,
-          premium: false
+          premium,
+          sessionId: premium ? activeSessionId() : undefined
         })
       });
 
       const data = await response.json();
       if (data.success) {
+        if (premium) consumeEntitlement();
         setReading(data.reading);
       } else {
         setError(data.error || 'Failed to generate reading');
@@ -67,6 +101,24 @@ export default function Home() {
   const resetForm = () => {
     setReading(null);
     setError('');
+  };
+
+  // Dynamic Stripe checkout — creates a session so /success gets a session_id to verify.
+  const startCheckout = async () => {
+    const email = window.prompt('Enter your email to receive your premium reading:');
+    if (!email) return;
+    try {
+      const res = await fetch(`${API_URL}/api/payment/create-checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ readingType: 'single-life', email }),
+      });
+      const data = await res.json();
+      if (data.success && data.checkoutUrl) window.location.href = data.checkoutUrl;
+      else alert('Unable to process payment. Please try again.');
+    } catch {
+      alert('Payment error. Please try again.');
+    }
   };
 
   return (
@@ -249,7 +301,7 @@ export default function Home() {
             <p>Get a comprehensive past life reading with detailed narratives, karmic patterns, healing guidance, and integration practices.</p>
             <button
               className="btn-premium"
-              onClick={() => { window.location.href = 'https://buy.stripe.com/28E4gyfVCail9OsgAr8k801'; }}
+              onClick={startCheckout}
             >
               Get Full Reading - $5.99
             </button>
