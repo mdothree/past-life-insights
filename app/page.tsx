@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://pastlives-api.vercel.app';
 
@@ -35,6 +35,28 @@ function consumeEntitlement(): void {
   } catch {}
 }
 
+// The model sometimes answers in Markdown. Render it as plain paragraphs via
+// React text nodes (never innerHTML): drop headings and rules, strip
+// emphasis asterisks/underscores, keep the words.
+function toParagraphs(text: string): string[] {
+  return String(text || '')
+    .replace(/\r\n/g, '\n')
+    .split(/\n\s*\n/)
+    .map(block => block
+      .split('\n')
+      // horizontal rules and headings (the page already has its own heading)
+      .filter(line => !/^\s*([-*_]\s*){3,}$/.test(line) && !/^\s{0,3}#{1,6}\s/.test(line))
+      .map(line => line
+        .replace(/^\s*>\s?/, '')
+        .replace(/^\s*[-*+]\s+/, '')
+        .replace(/(\*\*|__)(.+?)\1/g, '$2')
+        .replace(/(^|[^*\w])[*_]([^*_\n]+)[*_](?![*\w])/g, '$1$2')
+        .trim())
+      .filter(Boolean)
+      .join(' '))
+    .filter(Boolean);
+}
+
 export default function Home() {
   const [formData, setFormData] = useState({
     name: '',
@@ -50,6 +72,13 @@ export default function Home() {
   const [reading, setReading] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  // The form is swapped for the results; bring the results into view so the
+  // user doesn't land mid-page on the upsell.
+  useEffect(() => {
+    if (reading) resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [reading]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,6 +130,7 @@ export default function Home() {
   const resetForm = () => {
     setReading(null);
     setError('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Dynamic Stripe checkout — creates a session so /success gets a session_id to verify.
@@ -237,9 +267,12 @@ export default function Home() {
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? 'Connecting to your soul...' : 'Reveal My Past Life'}
           </button>
+          {loading && (
+            <p className="loading-note" role="status">Your reading is being written — this can take a few seconds.</p>
+          )}
         </form>
       ) : (
-        <div className="reading-results">
+        <div className="reading-results" ref={resultsRef}>
           <div className="result-header">
             <h2>Your Past Life Glimpse</h2>
           </div>
@@ -247,12 +280,10 @@ export default function Home() {
           {reading.glimpse && (
             <div className="result-section glimpse">
               <div className="glimpse-icon">👁️</div>
-              <p className="glimpse-text">{reading.glimpse}</p>
+              {toParagraphs(reading.glimpse).map((para, i) => (
+                <p key={i} className="glimpse-text">{para}</p>
+              ))}
             </div>
-          )}
-
-          {reading.message && (
-            <p className="upgrade-message">{reading.message}</p>
           )}
 
           {reading.pastLifeVision && (
@@ -349,7 +380,7 @@ export default function Home() {
           color: #a855f7;
         }
         .section-hint {
-          color: #64748b;
+          color: #94a3b8;
           font-size: 0.9rem;
           margin-bottom: 1rem;
         }
@@ -371,6 +402,7 @@ export default function Home() {
           font-size: 0.9rem;
         }
         input, textarea {
+          box-sizing: border-box;
           width: 100%;
           padding: 0.75rem;
           background: #252542;
@@ -379,6 +411,7 @@ export default function Home() {
           color: #f1f5f9;
           font-size: 1rem;
           font-family: inherit;
+          color-scheme: dark;
         }
         input:focus, textarea:focus {
           outline: none;
@@ -398,6 +431,11 @@ export default function Home() {
         .btn-primary:disabled {
           opacity: 0.7;
           cursor: not-allowed;
+        }
+        .loading-note {
+          text-align: center;
+          color: #94a3b8;
+          margin-top: 0.75rem;
         }
         .btn-secondary {
           width: 100%;
@@ -443,7 +481,9 @@ export default function Home() {
           font-size: 1.1rem;
           line-height: 1.8;
           font-style: italic;
+          margin: 0 0 1rem;
         }
+        .glimpse-text:last-child { margin-bottom: 0; }
         .upgrade-message {
           text-align: center;
           color: #94a3b8;
@@ -461,7 +501,7 @@ export default function Home() {
           margin-bottom: 1rem;
         }
         .vision-tag {
-          background: #a855f7;
+          background: #7e22ce;
           padding: 0.25rem 0.75rem;
           border-radius: 1rem;
           font-size: 0.85rem;
@@ -501,7 +541,7 @@ export default function Home() {
           border: none;
           padding: 1rem 2rem;
           border-radius: 0.5rem;
-          color: white;
+          color: #1a1a2e;
           font-weight: 600;
           cursor: pointer;
           margin-top: 1rem;
