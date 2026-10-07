@@ -1,0 +1,33 @@
+{
+  "name": "Past Life Insights — MDO3D Guidance",
+  "short_name": "Past Life",
+  "description": "Share your birth details, passions and recurring life patterns for a reflective past life reading exploring possible past lives, karmic themes and lessons.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f0f1a",
+  "theme_color": "#a855f7",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

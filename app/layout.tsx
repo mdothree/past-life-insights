@@ -1,13 +1,29 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
+import { SITE_URL, SITE_NAME, JSON_LD, pageMetadata } from './lib/seo'
 
 export const metadata: Metadata = {
-  title: 'Past Life Insights',
-  description: 'Discover echoes of your soul journey. Explore past life connections and understand karmic patterns affecting your present.',
-  openGraph: {
-    title: 'Past Life Insights',
-    description: 'Discover the echoes of your soul journey',
-    url: 'https://pastlife.mdo3d.com',
-  }
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
+  keywords: ["past life", "past life reading", "past lives", "reincarnation", "karmic patterns", "soul journey", "spiritual reading"],
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+  },
+  manifest: '/site.webmanifest',
+  ...pageMetadata({
+    title: "Past Life Reading — Past Life Insights",
+    description: "Share your birth details, passions and recurring life patterns for a reflective past life reading exploring possible past lives, karmic themes and lessons.",
+    path: '/',
+  }),
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: "#a855f7",
 }
 
 export default function RootLayout({
@@ -18,7 +34,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+        />
       </head>
       <body style={{ margin: 0, background: '#0f0f1a', color: '#f1f5f9' }}>{children}</body>
     </html>
