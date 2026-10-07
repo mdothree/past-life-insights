@@ -24,7 +24,7 @@ function hashString(str) {
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize Firebase
-    firebaseConfig.initialize().catch(console.warn);
+    firebaseConfig.initialize(); // optional, off by default; never rejects
   const revealBtn = document.getElementById('reveal-btn');
   const resultsSection = document.getElementById('results-section');
   const newBtn = document.getElementById('new-btn');
