@@ -152,12 +152,13 @@ export default function Home() {
   };
 
   return (
-    <main className="container">
+    <div className="container">
       <header>
         <h1>Past Life Insights</h1>
         <p className="subtitle">Discover the echoes of your soul's journey</p>
       </header>
 
+      <main id="main-content">
       {!reading ? (
         <form onSubmit={handleSubmit} className="reading-form">
           <div className="form-section">
@@ -352,6 +353,7 @@ export default function Home() {
           </button>
         </div>
       )}
+      </main>
 
       <footer>
         <p>Part of the <a href="https://mdo3d.com">MDO3D Divination</a> suite</p>
@@ -563,6 +565,6 @@ export default function Home() {
         }
         footer a { color: #a855f7; }
       `}</style>
-    </main>
+    </div>
   );
 }
