@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+// Synced from projects/divination/shared/pricing.json by sync-pricing.mjs; the
+// API charges from the same slice (JARVIS #63), so shown price == charged price.
+import pricing from './lib/pricing.json';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://pastlives-api.vercel.app';
 
@@ -9,6 +12,15 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://pastlives-api.vercel
 // consume only after a successful premium response so a failed call doesn't
 // burn the credit.
 const ENT_KEY = 'mdo3d_premium';
+
+// The reading sold on this page.
+const READING_TYPE = 'single-life';
+function priceLabel(type: string): string {
+  const entry = (pricing.types as Record<string, { amount_cents: number }>)[type];
+  if (!entry) return '';
+  const c = entry.amount_cents;
+  return '$' + (c % 100 === 0 ? String(c / 100) : (c / 100).toFixed(2));
+}
 function entIndex(list: any[]): number {
   return list.findIndex((e: any) => !e.consumed &&
     (!/monthly/.test(e.readingType || '') || Date.now() - e.verifiedAt < 30 * 24 * 60 * 60 * 1000));
@@ -72,6 +84,12 @@ export default function Home() {
   const [reading, setReading] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  // Paid from first use (JARVIS #94): set when there is no verified purchase
+  // (or the API refused it), so the checkout prompt shows instead of a reading.
+  const [needsPurchase, setNeedsPurchase] = useState(false);
+  // The API refused the stored purchase this visit (kept in memory only, so a
+  // transient verification error never burns a valid credit).
+  const [entitlementRejected, setEntitlementRejected] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
 
   // The form is swapped for the results; bring the results into view so the
@@ -88,10 +106,16 @@ export default function Home() {
       return;
     }
 
-    setLoading(true);
     setError('');
 
-    const premium = hasEntitlement();
+    // No unpaid reading tier: without a verified purchase, offer checkout.
+    if (!hasEntitlement() || entitlementRejected) {
+      setNeedsPurchase(true);
+      return;
+    }
+    setNeedsPurchase(false);
+    setLoading(true);
+    const premium = true;
     try {
       const response = await fetch(`${API_URL}/api/reading/generate`, {
         method: 'POST',
@@ -113,6 +137,12 @@ export default function Home() {
         })
       });
 
+      if (response.status === 402 || response.status === 403) {
+        // The purchase on this device was used up or isn't valid here.
+        setEntitlementRejected(true);
+        setNeedsPurchase(true);
+        return;
+      }
       const data = await response.json();
       if (data.success) {
         if (premium) consumeEntitlement();
@@ -141,7 +171,7 @@ export default function Home() {
       const res = await fetch(`${API_URL}/api/payment/create-checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ readingType: 'single-life', email }),
+        body: JSON.stringify({ readingType: READING_TYPE, email }),
       });
       const data = await res.json();
       if (data.success && data.checkoutUrl) window.location.href = data.checkoutUrl;
@@ -280,6 +310,16 @@ export default function Home() {
           {loading && (
             <p className="loading-note" role="status">Your reading is being written — this can take a few seconds.</p>
           )}
+
+          {needsPurchase && (
+            <div className="premium-cta" role="status">
+              <h3>Unlock Your Past Life Reading</h3>
+              <p>A detailed past life narrative with karmic patterns, healing guidance, and integration practices.</p>
+              <button type="button" className="btn-premium" onClick={startCheckout}>
+                Get Full Reading - {priceLabel(READING_TYPE)}
+              </button>
+            </div>
+          )}
         </form>
       ) : (
         <div className="reading-results" ref={resultsRef}>
@@ -344,7 +384,7 @@ export default function Home() {
               className="btn-premium"
               onClick={startCheckout}
             >
-              Get Full Reading - $5.99
+              Get Full Reading - {priceLabel(READING_TYPE)}
             </button>
           </div>
 
