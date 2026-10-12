@@ -164,8 +164,9 @@ export default function Home() {
             <h3>Birth Information</h3>
 
             <div className="form-group">
-              <label>Your Name (Optional)</label>
+              <label htmlFor="pl-name">Your Name (Optional)</label>
               <input
+                id="pl-name"
                 type="text"
                 placeholder="Enter your name"
                 value={formData.name}
@@ -175,8 +176,9 @@ export default function Home() {
 
             <div className="form-row">
               <div className="form-group">
-                <label>Birth Date *</label>
+                <label htmlFor="pl-birthDate">Birth Date *</label>
                 <input
+                  id="pl-birthDate"
                   type="date"
                   value={formData.birthDate}
                   onChange={e => setFormData(prev => ({ ...prev, birthDate: e.target.value }))}
@@ -185,8 +187,9 @@ export default function Home() {
               </div>
 
               <div className="form-group">
-                <label>Birth Time (Optional)</label>
+                <label htmlFor="pl-birthTime">Birth Time (Optional)</label>
                 <input
+                  id="pl-birthTime"
                   type="time"
                   value={formData.birthTime}
                   onChange={e => setFormData(prev => ({ ...prev, birthTime: e.target.value }))}
@@ -195,8 +198,9 @@ export default function Home() {
             </div>
 
             <div className="form-group">
-              <label>Birth Place (Optional)</label>
+              <label htmlFor="pl-birthPlace">Birth Place (Optional)</label>
               <input
+                id="pl-birthPlace"
                 type="text"
                 placeholder="City, Country"
                 value={formData.birthPlace}
@@ -210,8 +214,9 @@ export default function Home() {
             <p className="section-hint">These details help reveal more specific past life connections</p>
 
             <div className="form-group">
-              <label>Current Life Challenges</label>
+              <label htmlFor="pl-currentChallenges">Current Life Challenges</label>
               <textarea
+                id="pl-currentChallenges"
                 placeholder="What patterns or challenges keep appearing in your life?"
                 value={formData.currentChallenges}
                 onChange={e => setFormData(prev => ({ ...prev, currentChallenges: e.target.value }))}
@@ -220,8 +225,9 @@ export default function Home() {
             </div>
 
             <div className="form-group">
-              <label>Strong Interests or Passions</label>
+              <label htmlFor="pl-interests">Strong Interests or Passions</label>
               <textarea
+                id="pl-interests"
                 placeholder="What topics, time periods, or cultures inexplicably draw you?"
                 value={formData.interests}
                 onChange={e => setFormData(prev => ({ ...prev, interests: e.target.value }))}
@@ -230,8 +236,9 @@ export default function Home() {
             </div>
 
             <div className="form-group">
-              <label>Unexplained Fears or Phobias</label>
+              <label htmlFor="pl-fears">Unexplained Fears or Phobias</label>
               <textarea
+                id="pl-fears"
                 placeholder="Any fears that don't have an origin in this life?"
                 value={formData.fears}
                 onChange={e => setFormData(prev => ({ ...prev, fears: e.target.value }))}
@@ -240,8 +247,9 @@ export default function Home() {
             </div>
 
             <div className="form-group">
-              <label>Natural Talents</label>
+              <label htmlFor="pl-talents">Natural Talents</label>
               <textarea
+                id="pl-talents"
                 placeholder="Skills that came easily to you without much training?"
                 value={formData.talents}
                 onChange={e => setFormData(prev => ({ ...prev, talents: e.target.value }))}
@@ -254,6 +262,7 @@ export default function Home() {
             <h3>Your Question</h3>
             <div className="form-group">
               <textarea
+                aria-label="Your question"
                 placeholder="What would you like to know about your past lives? (e.g., 'What past life is affecting my current relationships?')"
                 value={formData.question}
                 onChange={e => setFormData(prev => ({ ...prev, question: e.target.value }))}
