@@ -162,7 +162,7 @@ export default function Home() {
       {!reading ? (
         <form onSubmit={handleSubmit} className="reading-form">
           <div className="form-section">
-            <h3>Birth Information</h3>
+            <h2>Birth Information</h2>
 
             <div className="form-group">
               <label>Your Name (Optional)</label>
@@ -207,7 +207,7 @@ export default function Home() {
           </div>
 
           <div className="form-section">
-            <h3>Soul Clues (Optional but helpful)</h3>
+            <h2>Soul Clues (Optional but helpful)</h2>
             <p className="section-hint">These details help reveal more specific past life connections</p>
 
             <div className="form-group">
@@ -252,7 +252,7 @@ export default function Home() {
           </div>
 
           <div className="form-section">
-            <h3>Your Question</h3>
+            <h2>Your Question</h2>
             <div className="form-group">
               <textarea
                 placeholder="What would you like to know about your past lives? (e.g., 'What past life is affecting my current relationships?')"
@@ -378,7 +378,9 @@ export default function Home() {
         .form-section {
           margin-bottom: 2rem;
         }
-        .form-section h3 {
+        .form-section h2 {
+          font-size: 1.17em;
+          margin-top: 1em;
           margin-bottom: 0.5rem;
           color: #a855f7;
         }
