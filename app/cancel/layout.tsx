@@ -3,7 +3,7 @@ import { pageMetadata } from '../lib/seo'
 
 export const metadata: Metadata = pageMetadata({
   title: "Payment Cancelled — Past Life Insights",
-  description: "Your Past Life Insights checkout was cancelled and no payment was taken. Return to the app to keep using the free features, or upgrade again whenever you like.",
+  description: "Your Past Life Insights checkout was cancelled and no payment was taken. Return to the app to keep using the basic features, or upgrade again whenever you like.",
   path: "/cancel",
   noindex: true,
 })
