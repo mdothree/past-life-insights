@@ -51,6 +51,8 @@ export default function Success() {
         <>
           <h1 className="status-ok">Payment confirmed</h1>
           <p>Your premium past life reading is unlocked. Generate your reading and the premium version will be applied automatically.</p>
+          <p className="got"><strong>What you got:</strong> one AI past life reading: a detailed narrative, karmic patterns, healing guidance and integration practices (saved in this browser on this device).</p>
+          <p className="next">Next step: <a href="https://astrology.mdo3d.com/" style={{ color: 'var(--accent)', fontWeight: 600 }}>try Astrology &rarr;</a></p>
         </>
       )}
       {state === 'failed' && (
