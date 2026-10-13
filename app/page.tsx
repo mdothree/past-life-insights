@@ -406,8 +406,8 @@ export default function Home() {
           margin: 0 auto;
           padding: 2rem 1rem;
           font-family: system-ui, -apple-system, sans-serif;
-          color: #f1f5f9;
-          background: #0f0f1a;
+          color: var(--text);
+          background: var(--bg);
           min-height: 100vh;
         }
         header { text-align: center; margin-bottom: 2rem; }
@@ -418,9 +418,9 @@ export default function Home() {
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
-        .subtitle { color: #94a3b8; }
+        .subtitle { color: var(--muted); }
         .reading-form {
-          background: #1a1a2e;
+          background: var(--surface);
           border-radius: 1rem;
           padding: 2rem;
         }
@@ -431,10 +431,10 @@ export default function Home() {
           font-size: 1.17em;
           margin-top: 1em;
           margin-bottom: 0.5rem;
-          color: #a855f7;
+          color: var(--accent);
         }
         .section-hint {
-          color: #94a3b8;
+          color: var(--muted);
           font-size: 0.9rem;
           margin-bottom: 1rem;
         }
@@ -452,24 +452,24 @@ export default function Home() {
         label {
           display: block;
           margin-bottom: 0.5rem;
-          color: #94a3b8;
+          color: var(--muted);
           font-size: 0.9rem;
         }
         input, textarea {
           box-sizing: border-box;
           width: 100%;
           padding: 0.75rem;
-          background: #252542;
-          border: 1px solid transparent;
+          background: var(--field);
+          border: 1px solid var(--field-border);
           border-radius: 0.5rem;
-          color: #f1f5f9;
+          color: var(--text);
           font-size: 1rem;
           font-family: inherit;
-          color-scheme: dark;
+          color-scheme: var(--scheme);
         }
         input:focus, textarea:focus {
           outline: none;
-          border-color: #a855f7;
+          border-color: var(--accent);
         }
         .btn-primary {
           width: 100%;
@@ -488,29 +488,29 @@ export default function Home() {
         }
         .loading-note {
           text-align: center;
-          color: #94a3b8;
+          color: var(--muted);
           margin-top: 0.75rem;
         }
         .btn-secondary {
           width: 100%;
           padding: 1rem;
-          background: #252542;
-          border: none;
+          background: var(--field);
+          border: 1px solid var(--field-border);
           border-radius: 0.5rem;
-          color: #f1f5f9;
+          color: var(--text);
           font-size: 1rem;
           cursor: pointer;
           margin-top: 1rem;
         }
         .error-message {
-          background: #7f1d1d;
-          color: #fecaca;
+          background: var(--err-bg);
+          color: var(--err-fg);
           padding: 1rem;
           border-radius: 0.5rem;
           margin-bottom: 1rem;
         }
         .reading-results {
-          background: #1a1a2e;
+          background: var(--surface);
           border-radius: 1rem;
           padding: 2rem;
         }
@@ -521,9 +521,9 @@ export default function Home() {
         .result-section {
           margin-bottom: 2rem;
           padding-bottom: 2rem;
-          border-bottom: 1px solid #252542;
+          border-bottom: 1px solid var(--line);
         }
-        .result-section h3 { color: #a855f7; margin-bottom: 1rem; }
+        .result-section h3 { color: var(--accent); margin-bottom: 1rem; }
         .glimpse {
           text-align: center;
           padding: 2rem;
@@ -540,11 +540,11 @@ export default function Home() {
         .glimpse-text:last-child { margin-bottom: 0; }
         .upgrade-message {
           text-align: center;
-          color: #94a3b8;
+          color: var(--muted);
           margin-top: 1rem;
         }
         .vision-details {
-          background: #252542;
+          background: var(--field);
           padding: 1.5rem;
           border-radius: 0.5rem;
         }
@@ -556,6 +556,7 @@ export default function Home() {
         }
         .vision-tag {
           background: #7e22ce;
+          color: #fff;
           padding: 0.25rem 0.75rem;
           border-radius: 1rem;
           font-size: 0.85rem;
@@ -566,7 +567,7 @@ export default function Home() {
         }
         .gifts-list li {
           padding: 0.75rem 0;
-          border-bottom: 1px solid #252542;
+          border-bottom: 1px solid var(--line);
         }
         .gifts-list li:before {
           content: '✨ ';
@@ -577,14 +578,15 @@ export default function Home() {
         .soul-message blockquote {
           font-size: 1.2rem;
           font-style: italic;
-          color: #c4b5fd;
-          border-left: 4px solid #a855f7;
-          padding-left: 1rem;
+          color: var(--quote);
+          border: 1px solid var(--accent);
+          border-radius: 0.75rem;
+          padding: 1rem;
           margin: 1rem 0;
         }
         .premium-cta {
           background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(99, 102, 241, 0.1));
-          border: 1px solid #a855f7;
+          border: 1px solid var(--accent);
           border-radius: 1rem;
           padding: 2rem;
           text-align: center;
@@ -596,6 +598,7 @@ export default function Home() {
           padding: 1rem 2rem;
           border-radius: 0.5rem;
           color: #1a1a2e;
+          font-size: 1rem;
           font-weight: 600;
           cursor: pointer;
           margin-top: 1rem;
@@ -603,9 +606,9 @@ export default function Home() {
         footer {
           text-align: center;
           padding: 2rem;
-          color: #94a3b8;
+          color: var(--muted);
         }
-        footer a { color: #a855f7; }
+        footer a { color: var(--accent); }
       `}</style>
     </div>
   );

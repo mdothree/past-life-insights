@@ -40,7 +40,7 @@ export default function Success() {
   }, []);
 
   return (
-    <main id="main-content" style={{ padding: '2rem', fontFamily: 'system-ui', textAlign: 'center' }}>
+    <main id="main-content" className="status-page">
       {state === 'verifying' && (
         <>
           <h1>Confirming your payment…</h1>
@@ -49,17 +49,17 @@ export default function Success() {
       )}
       {state === 'confirmed' && (
         <>
-          <h1 style={{ color: '#22c55e' }}>Payment confirmed</h1>
+          <h1 className="status-ok">Payment confirmed</h1>
           <p>Your premium past life reading is unlocked. Generate your reading and the premium version will be applied automatically.</p>
         </>
       )}
       {state === 'failed' && (
         <>
-          <h1 style={{ color: '#ef4444' }}>We couldn&apos;t confirm this payment</h1>
+          <h1 className="status-bad">We couldn&apos;t confirm this payment</h1>
           <p>If you were charged, your payment is safe — reply to your Stripe receipt email and we&apos;ll make it right.</p>
         </>
       )}
-      <a href="/" style={{ display: 'inline-block', marginTop: '2rem', color: '#a855f7' }}>
+      <a href="/" className="home-link">
         Return Home
       </a>
     </main>
