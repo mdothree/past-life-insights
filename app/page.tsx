@@ -494,7 +494,7 @@ export default function Home() {
         .glimpse-text {
           font-size: 1.1rem;
           line-height: 1.8;
-          font-style: italic;
+          font-style: normal;
           margin: 0 0 1rem;
         }
         .glimpse-text:last-child { margin-bottom: 0; }
@@ -536,7 +536,7 @@ export default function Home() {
         }
         .soul-message blockquote {
           font-size: 1.2rem;
-          font-style: italic;
+          font-style: normal;
           color: #c4b5fd;
           border-left: 4px solid #a855f7;
           padding-left: 1rem;
