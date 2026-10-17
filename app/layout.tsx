@@ -28,7 +28,7 @@ export const viewport: Viewport = {
 }
 
 const SKIP_LINK_CSS =
-  '.skip-link{position:absolute;left:-9999px;top:8px;z-index:10000;padding:8px 16px;background:#111111;color:#ffffff;font-weight:600;text-decoration:none;border-radius:4px}.skip-link:focus{left:8px;top:8px}'
+  '.skip-link{position:absolute;left:-9999px;top:8px;z-index:10000;padding:8px 16px;background:#111111;color:#ffffff;font-weight:600;text-decoration:none;border-radius:4px}.skip-link:focus{left:8px;top:8px}em,i,cite,q,dfn,var,address,blockquote{font-style:normal}'
 
 // Light/dark tokens (MDOThree method: html[data-theme] set by /js/theme-init.js before paint). AA in both themes.
 const THEME_CSS =
